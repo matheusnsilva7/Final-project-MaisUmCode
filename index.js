@@ -97,7 +97,7 @@ produtos.innerHTML = '';
 carinhoQuantidade.textContent = quantidade;
 
 window.addEventListener('DOMContentLoaded',async function() {
-    const produto = await fetch(`http://www.mocky.io/v2/5b15c4923100004a006f3c07`);
+    const produto = await fetch(`https://www.mocky.io/v2/5b15c4923100004a006f3c07`);
     produtosLoja = await produto.json();
     displayProdutos(produtosLoja.items);
 });
