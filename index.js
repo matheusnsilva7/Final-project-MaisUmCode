@@ -157,7 +157,7 @@ const htmlCarinho = function(a,i) {
             `
 };
 const calcularTotal = function(arr,){
-    return arr.reduce((a, b) => a + b, 0 );
+    return Number(arr.reduce((a, b) => a + b, 0));
 };
 //comentarios
 const comentario = function(){
