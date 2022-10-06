@@ -90,7 +90,7 @@ menuCarinho.addEventListener("click", function () {
         (a) => a !== String(e.parentElement.children[1].innerHTML)
       );
       localStorage.setItem("carinho", JSON.stringify(produtosNome));
-      quantidade = produtosNome.length;
+      quantidade = JSON.parse(localStorage.getItem("carinho")).length;
       carinhoQuantidade.textContent = quantidade;
     });
   });
@@ -167,7 +167,7 @@ const displayProdutos = function (a) {
         carinho.insertAdjacentHTML("afterbegin", htmlCarinho(a, i));
         produtosNome.push(a[i].product.name);
         localStorage.setItem("carinho", JSON.stringify(produtosNome));
-        quantidade = produtosNome.length;
+        quantidade = JSON.parse(localStorage.getItem("carinho")).length;
         carinhoQuantidade.textContent = quantidade;
       }
     });
