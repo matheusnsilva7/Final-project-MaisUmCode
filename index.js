@@ -87,9 +87,7 @@ menuCarinho.addEventListener("click", function () {
         (a) => a !== +e.parentElement.lastElementChild.innerHTML.split(" ")[1]
       );
       total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
-      produtosNome.splice(
-        produtosNome.indexOf(String(e.parentElement.children[1].innerHTML))
-      );
+      produtosNome = produtosNome.filter(a => a !== String(e.parentElement.children[1].innerHTML))
       localStorage.setItem("carinho", JSON.stringify(produtosNome));
     });
   });
