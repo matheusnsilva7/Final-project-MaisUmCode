@@ -59,6 +59,7 @@ Array.from(btn).forEach(function (e) {
     menuLinks.classList.toggle("funcionar");
   });
 });
+
 carinhoFechar.addEventListener("click", function () {
   menuCarinhoProdutos.classList.remove("funcionar");
   carinhoBackground.classList.remove("background");
@@ -81,14 +82,16 @@ menuCarinho.addEventListener("click", function () {
   Array.from(carinhoRemover).forEach(function (e) {
     e.addEventListener("click", function () {
       e.parentElement.remove();
-      quantidade--;
-      carinhoQuantidade.textContent = quantidade;
       precoTotal = precoTotal.filter(
         (a) => a !== +e.parentElement.lastElementChild.innerHTML.split(" ")[1]
       );
       total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
-      produtosNome = produtosNome.filter(a => a !== String(e.parentElement.children[1].innerHTML))
+      produtosNome = produtosNome.filter(
+        (a) => a !== String(e.parentElement.children[1].innerHTML)
+      );
       localStorage.setItem("carinho", JSON.stringify(produtosNome));
+      quantidade = produtosNome.length;
+      carinhoQuantidade.textContent = quantidade;
     });
   });
 });
@@ -161,11 +164,11 @@ const displayProdutos = function (a) {
       if (!produtosNome.includes(a[i].product.name)) {
         precoTotal.push(+a[i].product.priceSpecification.price);
         total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
-        quantidade++;
-        carinhoQuantidade.textContent = quantidade;
         carinho.insertAdjacentHTML("afterbegin", htmlCarinho(a, i));
         produtosNome.push(a[i].product.name);
         localStorage.setItem("carinho", JSON.stringify(produtosNome));
+        quantidade = produtosNome.length;
+        carinhoQuantidade.textContent = quantidade;
       }
     });
   });
