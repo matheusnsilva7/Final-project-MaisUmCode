@@ -1,109 +1,135 @@
-'use strict';
+"use strict";
 
-const comentarios = [{
-    nome : 'Heitor',
-    comentario : 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.'
-},{
-    nome : 'Alice',
-    comentario : 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour,'
-},{
-    nome : 'Davi',
-    comentario : 'Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur,'
-},{
-    nome : 'Laura',
-    comentario : 'Many desktop publishing packages and web page editors now use Lorem Ipsum as their model text, and a search for lorem ipsum will uncover many web sites.'
-}
+const comentarios = [
+  {
+    nome: "Heitor",
+    comentario:
+      "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+  },
+  {
+    nome: "Alice",
+    comentario:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour,",
+  },
+  {
+    nome: "Davi",
+    comentario:
+      "Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur,",
+  },
+  {
+    nome: "Laura",
+    comentario:
+      "Many desktop publishing packages and web page editors now use Lorem Ipsum as their model text, and a search for lorem ipsum will uncover many web sites.",
+  },
 ];
-const menuLinks = document.querySelector('.menu_web');
-const links = document.querySelectorAll('ul');
-const produtos = document.querySelector('.produtos');       
-const btnEsquerda = document.querySelector('.esquerda');
-const btnDireita = document.querySelector('.direita');
-const comentarioTexto = document.querySelector('.comentarios_texto');
-const comentarioNome = document.querySelector('.comentarios_nome');
-const barraDePesquisa = document.querySelector('.menu_web_perquisa');
-const menuCarinho = document.querySelector('.menu_carinho');
-const menuCarinhoProdutos = document.querySelector('.menu_carinho_produtos');
-const carinhoFechar = document.querySelector('.carinho_fechar');
-const produtosCarinho = document.getElementsByClassName('produtos_carinho');
+const menuLinks = document.querySelector(".menu_web");
+const links = document.querySelectorAll("ul");
+const produtos = document.querySelector(".produtos");
+const btnEsquerda = document.querySelector(".esquerda");
+const btnDireita = document.querySelector(".direita");
+const comentarioTexto = document.querySelector(".comentarios_texto");
+const comentarioNome = document.querySelector(".comentarios_nome");
+const barraDePesquisa = document.querySelector(".menu_web_perquisa");
+const menuCarinho = document.querySelector(".menu_carinho");
+const menuCarinhoProdutos = document.querySelector(".menu_carinho_produtos");
+const carinhoFechar = document.querySelector(".carinho_fechar");
+const produtosCarinho = document.getElementsByClassName("produtos_carinho");
 const carinho = document.querySelector(".carinho");
 const total = document.querySelector("span");
-const carinhoQuantidade = document.querySelector('.carinho_quantidade');
-const carinhoRemover = document.getElementsByClassName('carinho_remover');
-const carinhoFileira = document.getElementsByClassName('carinho_fileira');
-const carinhoNome = document.querySelectorAll('.carinho_nome');
-const produtosFileira = document.querySelectorAll('.produtos_fileira');
-const btn = document.querySelectorAll('.btn')
+const carinhoQuantidade = document.querySelector(".carinho_quantidade");
+const carinhoRemover = document.getElementsByClassName("carinho_remover");
+const carinhoFileira = document.getElementsByClassName("carinho_fileira");
+const carinhoBackground = document.querySelector(".menu_carinho-background");
+const carinhoNome = document.querySelectorAll(".carinho_nome");
+const produtosFileira = document.querySelectorAll(".produtos_fileira");
+const btn = document.querySelectorAll(".btn");
 
-let produtosNome = localStorage.getItem("carinho") ? JSON.parse(localStorage.getItem("carinho")) : [] ;
-let precoTotal = []
-let produtosLoja = []
+let produtosNome = localStorage.getItem("carinho")
+  ? JSON.parse(localStorage.getItem("carinho"))
+  : [];
+let precoTotal = [];
+let produtosLoja = [];
 let indice = 0;
 let quantidade = produtosNome.length;
-let pesquisaNome = []
+let pesquisaNome = [];
 
-//Menu 
-Array.from(btn).forEach(function(e){
-    e.addEventListener('click',function(){
-        menuLinks.classList.toggle('funcionar')
-    })
-})
-carinhoFechar.addEventListener('click',function(){
-    menuCarinhoProdutos.classList.remove('funcionar');
-}) 
-
-links.forEach(function(link){
-    link.addEventListener('click',function(){
-        menuLinks.classList.remove('funcionar');
-    })
+//Menu
+Array.from(btn).forEach(function (e) {
+  e.addEventListener("click", function () {
+    menuLinks.classList.toggle("funcionar");
+  });
 });
-menuCarinho.addEventListener('click',function(){
-    menuCarinhoProdutos.classList.add('funcionar');
-    Array.from(carinhoRemover).forEach(function(e){
-        e.addEventListener('click',function(){
-        e.parentElement.remove();
-        quantidade--;
-        carinhoQuantidade.textContent = quantidade;
-        precoTotal.unshift(-e.parentElement.lastElementChild.innerHTML.split(' ')[1]); 
-        if(calcularTotal(precoTotal)< 0){
-            total.textContent = `R$ 00.0`
-        }else{
-            total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
-        };
-        produtosNome.splice(produtosNome.indexOf(String(e.parentElement.children[1].innerHTML)));
-        localStorage.setItem('carinho',JSON.stringify(produtosNome));
-        });
+carinhoFechar.addEventListener("click", function () {
+  menuCarinhoProdutos.classList.remove("funcionar");
+  carinhoBackground.classList.remove("background");
+});
+
+carinhoBackground.addEventListener("click", function () {
+  menuCarinhoProdutos.classList.remove("funcionar");
+  carinhoBackground.classList.remove("background");
+});
+
+links.forEach(function (link) {
+  link.addEventListener("click", function () {
+    menuLinks.classList.remove("funcionar");
+  });
+});
+
+menuCarinho.addEventListener("click", function () {
+  carinhoBackground.classList.add("background");
+  menuCarinhoProdutos.classList.add("funcionar");
+  Array.from(carinhoRemover).forEach(function (e) {
+    e.addEventListener("click", function () {
+      e.parentElement.remove();
+      quantidade--;
+      carinhoQuantidade.textContent = quantidade;
+      precoTotal = precoTotal.filter(
+        (a) => a !== +e.parentElement.lastElementChild.innerHTML.split(" ")[1]
+      );
+      total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
+      produtosNome.splice(
+        produtosNome.indexOf(String(e.parentElement.children[1].innerHTML))
+      );
+      localStorage.setItem("carinho", JSON.stringify(produtosNome));
     });
+  });
 });
-barraDePesquisa.addEventListener('keyup',function(){
-    const palavra = barraDePesquisa.value.toLowerCase();
-    const barraProdutos = produtosLoja.items.filter(produtos =>{
-        return produtos.product.name.toLowerCase().includes(palavra)
-    })
-    barraProdutos.forEach(function (a){ 
-        pesquisaNome.push(a.product.name)
-    })
-    Array.from(produtos.children).forEach(function(e){
-        if (!pesquisaNome.includes(e.children[1].innerHTML)){
-            e.classList.add('display')
-        }else{
-            e.classList.remove('display')
-        }
-    })
-    pesquisaNome = []
+
+barraDePesquisa.addEventListener("keyup", function () {
+  const palavra = barraDePesquisa.value.toLowerCase();
+  const barraProdutos = produtosLoja.items.filter((produtos) => {
+    return produtos.product.name
+      .replace(/[ `~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "")
+      .toLowerCase()
+      .includes(palavra);
+  });
+  barraProdutos.forEach(function (a) {
+    pesquisaNome.push(a.product.name);
+  });
+  Array.from(produtos.children).forEach(function (e) {
+    if (!pesquisaNome.includes(e.children[1].innerHTML)) {
+      e.classList.add("display");
+    } else {
+      e.classList.remove("display");
+    }
+  });
+  pesquisaNome = [];
 });
-//Produtos
-produtos.innerHTML = '';
+
+produtos.innerHTML = "";
 carinhoQuantidade.textContent = quantidade;
 
-window.addEventListener('DOMContentLoaded',async function() {
-    const produto = await fetch(`https://www.mocky.io/v2/5b15c4923100004a006f3c07`);
-    produtosLoja = await produto.json();
-    displayProdutos(produtosLoja.items);
+window.addEventListener("DOMContentLoaded", async function () {
+  const produto = await fetch(
+    `https://www.mocky.io/v2/5b15c4923100004a006f3c07`
+  );
+  produtosLoja = await produto.json();
+  displayProdutos(produtosLoja.items);
 });
-const displayProdutos = function(a){
-        a.forEach(function(produto){
-        const html = `
+
+const displayProdutos = function (a) {
+  a.forEach(function (produto) {
+    const html = `
             <div class="produtos_fileira">
                 <div class="produtor_imagem"><img src="${produto.product.imageObjects[0].extraLarge}" rel="${produto.product.name}"></div>
                 <div class="produtos_nome">${produto.product.name}</div>
@@ -115,37 +141,40 @@ const displayProdutos = function(a){
                 </button>
             </div>
             `;
-        produtos.insertAdjacentHTML('beforeend', html);
-    });
-    produtosNome.forEach(function(e){
-        if(produtosNome === null){
-            carinho.innerHTML = ''
-        }else{
-            a.filter((elem,i) => {
-                if(elem.product.name === e){
-                    carinho.insertAdjacentHTML('afterbegin', htmlCarinho(a,i ));
-                    precoTotal.push(a[i].product.priceSpecification.price);
-                    total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
-                }
-            })
+    produtos.insertAdjacentHTML("beforeend", html);
+  });
+
+  produtosNome.forEach(function (e) {
+    if (produtosNome === null) {
+      carinho.innerHTML = "";
+    } else {
+      a.filter((elem, i) => {
+        if (elem.product.name === e) {
+          carinho.insertAdjacentHTML("afterbegin", htmlCarinho(a, i));
+          precoTotal.push(a[i].product.priceSpecification.price);
+          total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
         }
-    })
-    Array.from(produtosCarinho).forEach(function(e,i){
-        e.addEventListener('click',function(obj){
-            if(!produtosNome.includes(a[i].product.name)){
-            precoTotal.push(a[i].product.priceSpecification.price);
-            total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
-            quantidade++;
-            carinhoQuantidade.textContent = quantidade;
-            carinho.insertAdjacentHTML('afterbegin', htmlCarinho(a,i));
-            produtosNome.push(a[i].product.name);
-            localStorage.setItem('carinho',JSON.stringify(produtosNome));
-            }
-        });
+      });
+    }
+  });
+
+  Array.from(produtosCarinho).forEach(function (e, i) {
+    e.addEventListener("click", function (obj) {
+      if (!produtosNome.includes(a[i].product.name)) {
+        precoTotal.push(+a[i].product.priceSpecification.price);
+        total.textContent = `R$ ${calcularTotal(precoTotal).toFixed(1)}`;
+        quantidade++;
+        carinhoQuantidade.textContent = quantidade;
+        carinho.insertAdjacentHTML("afterbegin", htmlCarinho(a, i));
+        produtosNome.push(a[i].product.name);
+        localStorage.setItem("carinho", JSON.stringify(produtosNome));
+      }
     });
+  });
 };
-const htmlCarinho = function(a,i) {
-    return `
+
+const htmlCarinho = function (a, i) {
+  return `
             <div class="carinho_fileira">
                     <div class="carinho_img"><img src="${a[i].product.imageObjects[0].extraLarge}" rel="${a[i].product.name}"></div>
                     <div class="carinho_nome">${a[i].product.name}</div>
@@ -154,28 +183,31 @@ const htmlCarinho = function(a,i) {
                     </svg>
                     <div class="carinho_valor">R$ ${a[i].product.priceSpecification.price}</div>
                 </div>
-            `
+            `;
 };
-const calcularTotal = function(arr,){
-    return Number(arr.reduce((a, b) => a + b, 0));
+
+const calcularTotal = function (arr) {
+  return Number(arr.reduce((a, b) => a + b, 0));
 };
-//comentarios
-const comentario = function(){
-    comentarioTexto.textContent = comentarios[indice].comentario;
-    comentarioNome.textContent = `- ${comentarios[indice].nome}`;
+
+const comentario = function () {
+  comentarioTexto.textContent = comentarios[indice].comentario;
+  comentarioNome.textContent = `- ${comentarios[indice].nome}`;
 };
-comentario()
-btnEsquerda.addEventListener('click',function(){
-    indice--;
-    if(indice < 0){
-        indice = comentarios.length - 1;
-    }
-    comentario();
+comentario();
+
+btnEsquerda.addEventListener("click", function () {
+  indice--;
+  if (indice < 0) {
+    indice = comentarios.length - 1;
+  }
+  comentario();
 });
-btnDireita.addEventListener('click',function(){
-    indice++;
-    if(indice > 3){
-        indice = 0;
-    }
-    comentario();
+
+btnDireita.addEventListener("click", function () {
+  indice++;
+  if (indice > 3) {
+    indice = 0;
+  }
+  comentario();
 });
