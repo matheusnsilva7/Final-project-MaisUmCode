@@ -14,7 +14,7 @@
   width: 120px;
   height: 50px;
 }
-.menu_web_perquisa-Container {
+.menu_web_perquisa-Container{
   display: none;
 }
 header {
@@ -176,7 +176,7 @@ span {
   .menu_mobile {
     display: none;
   }
-  .menu_web_perquisa-Container {
+  .menu_web_perquisa-Container{
     position: relative;
     display: block;
   }
