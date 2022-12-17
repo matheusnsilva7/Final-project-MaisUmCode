@@ -97,7 +97,7 @@ menuCarinho.addEventListener("click", function () {
 });
 
 barraDePesquisa.addEventListener("keyup", function () {
-  const palavra = barraDePesquisa.value.toLowerCase();
+  const palavra = barraDePesquisa.value.toLowerCase().replace(" ", "");
   const barraProdutos = produtosLoja.items.filter((produtos) => {
     return produtos.product.name
       .replace(/[ `~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "")
