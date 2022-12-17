@@ -100,7 +100,7 @@ barraDePesquisa.addEventListener("keyup", function () {
   const palavra = barraDePesquisa.value.toLowerCase().replaceAll(" ", "");
   const barraProdutos = produtosLoja.items.filter((produtos) => {
     return produtos.product.name
-      .replace(/[ `~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "")
+      .replaceAll(/[ `~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "")
       .toLowerCase()
       .includes(palavra);
   });
